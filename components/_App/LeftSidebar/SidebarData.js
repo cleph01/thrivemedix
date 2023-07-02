@@ -25,27 +25,6 @@ export const SidebarData = [
         title: "Dashboard",
         path: "/",
         icon: <GridViewIcon />,
-        iconClosed: <KeyboardArrowRightIcon />,
-        iconOpened: <KeyboardArrowDownIcon />,
-
-        subNav: [
-            {
-                title: "eCommerce",
-                path: "/ecommerce/",
-            },
-            {
-                title: "Analytics",
-                path: "/analytics/",
-            },
-            {
-                title: "Project Management",
-                path: "/project-management/",
-            },
-            {
-                title: "LMS Courses",
-                path: "/lms-courses/",
-            },
-        ],
     },
     {
         title: "Google Business Profile",

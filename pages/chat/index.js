@@ -66,9 +66,9 @@ export default function Chat() {
 
     const router = useRouter();
 
-    React.useEffect(() => {
-        if (user == null) router.push("/authentication/lock-screen.js");
-    }, [user]);
+    // React.useEffect(() => {
+    //     if (user == null) router.push("/authentication/lock-screen.js");
+    // }, [user]);
 
     return (
         <>
