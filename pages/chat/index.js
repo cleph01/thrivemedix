@@ -16,9 +16,12 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import Badge from "@mui/material/Badge";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+
 import ChatBox from "@/components/Apps/Chat/ChatBox";
 import ChatBoxTwo from "@/components/Apps/Chat/ChatBoxTwo";
 import ChatBoxThree from "@/components/Apps/Chat/ChatBoxThree";
+
+import getLiveData from "../../firebase/getLiveData";
 
 // Search field style
 const Search = styled("div")(({ theme }) => ({
@@ -62,13 +65,21 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Chat() {
+    const [messages, setMessages] = React.useState([]);
+
     const { user } = useAuthContext();
 
     const router = useRouter();
 
-    // React.useEffect(() => {
-    //     if (user == null) router.push("/authentication/lock-screen.js");
-    // }, [user]);
+    React.useEffect(() => {
+        // if (user == null) router.push("/authentication/lock-screen.js");
+
+        let path = "businesses/X5xnQE4nqjRTmQDQzc3H/chats/19143125729/messages";
+
+        getLiveData(path, setMessages);
+    }, [user]);
+
+    console.log("MEssages: ", messages);
 
     return (
         <>
@@ -122,7 +133,7 @@ export default function Chat() {
                             {/* All Messages */}
                             <Typography mb="10px">
                                 <i className="ri-message-2-line"></i> ALL
-                                MESSAGES
+                                MESSAGES - {messages.length}
                             </Typography>
 
                             <TabList>
