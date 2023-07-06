@@ -327,6 +327,7 @@ const ChatBox = ({ patientNumber, messages, endOfMessagesRef }) => {
                                 style: {
                                     borderRadius: 100,
                                     background: "#fff",
+                                    fontSize: "16px",
                                 },
                             }}
                         />
