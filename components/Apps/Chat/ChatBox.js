@@ -104,29 +104,63 @@ const ChatBox = ({ patientNumber, messages, idx }) => {
                     </Box>
 
                     <Box>
-                        <IconButton
-                            size="small"
-                            sx={{ background: "#F2F6F8" }}
-                            className="ml-5px for-dark-button"
-                        >
-                            <VideocamIcon />
-                        </IconButton>
+                        <div className="right-replay-box">
+                            <IconButton
+                                size="small"
+                                sx={{ background: "#F2F6F8" }}
+                                className="ml-5px for-dark-button"
+                            >
+                                <MoreVertIcon />
+                            </IconButton>
 
-                        <IconButton
-                            size="small"
-                            sx={{ background: "#F2F6F8" }}
-                            className="ml-5px for-dark-button"
-                        >
-                            <CallIcon />
-                        </IconButton>
+                            <div className="hover-caption">
+                                <List sx={{ display: "inline" }}>
+                                    <ListItem disablePadding>
+                                        <ListItemButton
+                                            sx={{
+                                                padding: "1px 15px",
+                                            }}
+                                        >
+                                            <ReplyIcon
+                                                fontSize="small"
+                                                sx={{
+                                                    mt: "-4px",
+                                                }}
+                                                className="mr-5px"
+                                            />
+                                            <ListItemText
+                                                primary="Reply"
+                                                primaryTypographyProps={{
+                                                    fontSize: "12px",
+                                                }}
+                                            />
+                                        </ListItemButton>
+                                    </ListItem>
 
-                        <IconButton
-                            size="small"
-                            sx={{ background: "#F2F6F8" }}
-                            className="ml-5px for-dark-button"
-                        >
-                            <MoreVertIcon />
-                        </IconButton>
+                                    <ListItem disablePadding>
+                                        <ListItemButton
+                                            sx={{
+                                                padding: "1px 15px",
+                                            }}
+                                        >
+                                            <DeleteOutlineIcon
+                                                fontSize="small"
+                                                sx={{
+                                                    mt: "-4px",
+                                                }}
+                                                className="mr-5px"
+                                            />
+                                            <ListItemText
+                                                primary="Delete"
+                                                primaryTypographyProps={{
+                                                    fontSize: "12px",
+                                                }}
+                                            />
+                                        </ListItemButton>
+                                    </ListItem>
+                                </List>
+                            </div>
+                        </div>
                     </Box>
                 </Box>
 
@@ -180,68 +214,7 @@ const ChatBox = ({ patientNumber, messages, idx }) => {
                                         </Typography>
                                     </Box>
 
-                                    {/* Replay Dropdown */}
-                                    <Box className="ml-1">
-                                        <div className="right-replay-box">
-                                            <IconButton size="small">
-                                                <MoreVertIcon fontSize="small" />
-                                            </IconButton>
-
-                                            <div className="hover-caption">
-                                                <List
-                                                    sx={{ display: "inline" }}
-                                                >
-                                                    <ListItem disablePadding>
-                                                        <ListItemButton
-                                                            sx={{
-                                                                padding:
-                                                                    "1px 15px",
-                                                            }}
-                                                        >
-                                                            <ReplyIcon
-                                                                fontSize="small"
-                                                                sx={{
-                                                                    mt: "-4px",
-                                                                }}
-                                                                className="mr-5px"
-                                                            />
-                                                            <ListItemText
-                                                                primary="Reply"
-                                                                primaryTypographyProps={{
-                                                                    fontSize:
-                                                                        "12px",
-                                                                }}
-                                                            />
-                                                        </ListItemButton>
-                                                    </ListItem>
-
-                                                    <ListItem disablePadding>
-                                                        <ListItemButton
-                                                            sx={{
-                                                                padding:
-                                                                    "1px 15px",
-                                                            }}
-                                                        >
-                                                            <DeleteOutlineIcon
-                                                                fontSize="small"
-                                                                sx={{
-                                                                    mt: "-4px",
-                                                                }}
-                                                                className="mr-5px"
-                                                            />
-                                                            <ListItemText
-                                                                primary="Delete"
-                                                                primaryTypographyProps={{
-                                                                    fontSize:
-                                                                        "12px",
-                                                                }}
-                                                            />
-                                                        </ListItemButton>
-                                                    </ListItem>
-                                                </List>
-                                            </div>
-                                        </div>
-                                    </Box>
+                                    
                                 </Box>
                             </Box>
                         ) : (
@@ -262,68 +235,7 @@ const ChatBox = ({ patientNumber, messages, idx }) => {
                                     }}
                                     className="ml-1"
                                 >
-                                    {/* Replay Dropdown */}
-                                    <Box>
-                                        <div className="left-replay-box">
-                                            <IconButton size="small">
-                                                <MoreVertIcon fontSize="small" />
-                                            </IconButton>
-
-                                            <div className="hover-caption">
-                                                <List
-                                                    sx={{ display: "inline" }}
-                                                >
-                                                    <ListItem disablePadding>
-                                                        <ListItemButton
-                                                            sx={{
-                                                                padding:
-                                                                    "1px 15px",
-                                                            }}
-                                                        >
-                                                            <ReplyIcon
-                                                                fontSize="small"
-                                                                sx={{
-                                                                    mt: "-4px",
-                                                                }}
-                                                                className="mr-5px"
-                                                            />
-                                                            <ListItemText
-                                                                primary="Reply"
-                                                                primaryTypographyProps={{
-                                                                    fontSize:
-                                                                        "12px",
-                                                                }}
-                                                            />
-                                                        </ListItemButton>
-                                                    </ListItem>
-
-                                                    <ListItem disablePadding>
-                                                        <ListItemButton
-                                                            sx={{
-                                                                padding:
-                                                                    "1px 15px",
-                                                            }}
-                                                        >
-                                                            <DeleteOutlineIcon
-                                                                fontSize="small"
-                                                                sx={{
-                                                                    mt: "-4px",
-                                                                }}
-                                                                className="mr-5px"
-                                                            />
-                                                            <ListItemText
-                                                                primary="Delete"
-                                                                primaryTypographyProps={{
-                                                                    fontSize:
-                                                                        "12px",
-                                                                }}
-                                                            />
-                                                        </ListItemButton>
-                                                    </ListItem>
-                                                </List>
-                                            </div>
-                                        </div>
-                                    </Box>
+                                    
 
                                     <Box className="mr-1">
                                         <Typography
