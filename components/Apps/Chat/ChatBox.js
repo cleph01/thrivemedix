@@ -44,6 +44,11 @@ const ChatBox = ({ patientNumber, messages, idx }) => {
 
         if (error === null) data.delete("chatMessage");
 
+        // Clear Chat Input Bubble after send
+        const chatInput = document.getElementById("chatMessage");
+
+        chatInput.value = "";
+
         console.log("result of sending SMS: ", result);
     };
 
