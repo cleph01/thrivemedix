@@ -80,11 +80,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function Chat() {
     const [tabIndex, setTabIndex] = React.useState(0);
 
-    const autoFocusRef = React.useRef(null);
+    const endOfMessagesRef = React.useRef(null);
 
     // scroll to bottom after ever sent message
     const scrollToBottom = () => {
-        autoFocusRef.current.scrollIntoView({
+        endOfMessagesRef.current.scrollIntoView({
             behavior: "smooth",
             block: "start",
         });
@@ -242,7 +242,7 @@ export default function Chat() {
                                         <ChatBox
                                             patientNumber={patientNumber}
                                             messages={messages}
-                                            autoFocusRef={autoFocusRef}
+                                            endOfMessagesRef={endOfMessagesRef}
                                         />
                                     </TabPanel>
                                 )
@@ -250,7 +250,6 @@ export default function Chat() {
                         </Card>
                     </Grid>
                 </Grid>
-                {/* <div ref={autoFocusRef}></div> */}
             </Tabs>
         </>
     );
