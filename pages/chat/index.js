@@ -135,13 +135,6 @@ export default function Chat() {
     }
     console.log("MEssages: ", messages);
 
-    const testArr = {
-        "+12039511492": new Array(3).fill(1),
-        "+19143125729": new Array(3).fill(1),
-    };
-
-    const sTestArr = ["+12039511492", "+19143125729"];
-    console.log("dafuq");
     return (
         <>
             {/* Page title */}

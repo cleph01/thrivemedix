@@ -85,12 +85,10 @@ const ChatTab = ({ patientNumber, topMessage }) => {
                         fontSize: "11px",
                     }}
                 >
-                    {topMessage.timestamp
-                        .toDate()
-                        .toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                        })}
+                    {topMessage.timestamp?.toDate().toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    })}
                 </Typography>
 
                 <Box className="mr-10px">

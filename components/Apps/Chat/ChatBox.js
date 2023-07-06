@@ -206,15 +206,13 @@ const ChatBox = ({ patientNumber, messages, idx }) => {
 
                                         <Typography fontSize="12px">
                                             {message.timestamp
-                                                .toDate()
+                                                ?.toDate()
                                                 .toLocaleTimeString([], {
                                                     hour: "2-digit",
                                                     minute: "2-digit",
                                                 })}
                                         </Typography>
                                     </Box>
-
-                                    
                                 </Box>
                             </Box>
                         ) : (
@@ -235,8 +233,6 @@ const ChatBox = ({ patientNumber, messages, idx }) => {
                                     }}
                                     className="ml-1"
                                 >
-                                    
-
                                     <Box className="mr-1">
                                         <Typography
                                             sx={{
@@ -256,7 +252,7 @@ const ChatBox = ({ patientNumber, messages, idx }) => {
                                             textAlign="end"
                                         >
                                             {message.timestamp
-                                                .toDate()
+                                                ?.toDate()
                                                 .toLocaleTimeString([], {
                                                     hour: "2-digit",
                                                     minute: "2-digit",
