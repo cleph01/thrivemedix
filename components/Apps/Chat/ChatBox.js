@@ -1,3 +1,5 @@
+import React from "react";
+
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -18,6 +20,16 @@ import useGetDocumentWhere from "../../../firebase/useGetDocumentWhere";
 import sendSMS from "../../../firebase/sendSMS";
 
 const ChatBox = ({ patientNumber, messages, idx }) => {
+    const endOfMessagesRef = React.useRef();
+
+    // scroll to bottom after ever sent message
+    const scrollToBottom = () => {
+        endOfMessagesRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -46,8 +58,10 @@ const ChatBox = ({ patientNumber, messages, idx }) => {
 
         // Clear Chat Input Bubble after send
         const chatInput = document.getElementById("chatMessage");
-
         chatInput.value = "";
+
+        // scroll to bottom after ever sent message
+        scrollToBottom();
 
         console.log("result of sending SMS: ", result);
     };
@@ -276,6 +290,10 @@ const ChatBox = ({ patientNumber, messages, idx }) => {
                             </Box>
                         )
                     )}
+                    <div
+                        style={{ marginBottom: "4rem" }}
+                        ref={endOfMessagesRef}
+                    ></div>
                 </div>
 
                 {/* Footer */}
