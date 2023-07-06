@@ -290,24 +290,6 @@ const ChatBox = ({ patientNumber, messages, idx }) => {
                     }}
                     className="dark-BG-101010"
                 >
-                    <Box>
-                        <IconButton
-                            size="small"
-                            sx={{ background: "#F2F6F8" }}
-                            className="mr-5px for-dark-button"
-                        >
-                            <VideocamIcon />
-                        </IconButton>
-
-                        <IconButton
-                            size="small"
-                            sx={{ background: "#F2F6F8" }}
-                            className="mr-5px for-dark-button"
-                        >
-                            <CallIcon />
-                        </IconButton>
-                    </Box>
-
                     <Box
                         component="form"
                         noValidate
