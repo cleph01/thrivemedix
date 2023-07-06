@@ -18,10 +18,23 @@ import Badge from "@mui/material/Badge";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
 import ChatBox from "@/components/Apps/Chat/ChatBox";
+import ChatTab from "@/components/Apps/Chat/ChatTab";
+
 import ChatBoxTwo from "@/components/Apps/Chat/ChatBoxTwo";
 import ChatBoxThree from "@/components/Apps/Chat/ChatBoxThree";
 
-import getLiveData from "../../firebase/getLiveData";
+import firebase_app from "../../firebase/config";
+
+import {
+    getFirestore,
+    collection,
+    onSnapshot,
+    query,
+    where,
+    orderBy,
+} from "firebase/firestore";
+
+const db = getFirestore(firebase_app);
 
 // Search field style
 const Search = styled("div")(({ theme }) => ({
@@ -66,6 +79,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function Chat() {
     const [messages, setMessages] = React.useState([]);
+    const [loading, setLoading] = React.useState(true);
+    const [error, setError] = React.useState(null);
 
     const { user } = useAuthContext();
 
@@ -74,13 +89,59 @@ export default function Chat() {
     React.useEffect(() => {
         // if (user == null) router.push("/authentication/lock-screen.js");
 
-        let path = "businesses/X5xnQE4nqjRTmQDQzc3H/chats/19143125729/messages";
+        // define collection
+        const q = query(
+            collection(db, "chats"),
+            where("businessId", "==", "X5xnQE4nqjRTmQDQzc3H"),
+            orderBy("timestamp")
+        );
 
-        getLiveData(path, setMessages);
+        // define function
+        const unsubscribe = onSnapshot(
+            q,
+            (querySnapchot) => {
+                let ar = [];
+
+                querySnapchot.docs.forEach((doc) => {
+                    ar.push({ id: doc.id, ...doc.data() });
+                });
+
+                console.log("Message Arr: ", ar);
+                let mapByPatientNum = {};
+
+                ar.forEach((message) => {
+                    if (!(message.patientNumber in mapByPatientNum))
+                        mapByPatientNum[message.patientNumber] = [];
+                    mapByPatientNum[message.patientNumber].push(message);
+                });
+
+                console.log(mapByPatientNum);
+
+                setMessages(mapByPatientNum);
+                setLoading(false);
+            },
+            (error) => {
+                console.log("Error Getting Chat Messages: ", error);
+                setError(error);
+                setLoading(false);
+            }
+        );
+
+        return () => unsubscribe();
     }, [user]);
 
+    if (loading) {
+        return <div>...loading</div>;
+    }
     console.log("MEssages: ", messages);
 
+    const testArr = {
+        "+12039511492": new Array(3).fill(1),
+        "+19143125729": new Array(3).fill(1),
+    };
+
+    const sTestArr = ["+12039511492", "+19143125729"];
+    console.log("dafuq");
     return (
         <>
             {/* Page title */}
@@ -133,561 +194,22 @@ export default function Chat() {
                             {/* All Messages */}
                             <Typography mb="10px">
                                 <i className="ri-message-2-line"></i> ALL
-                                MESSAGES - {messages.length}
+                                MESSAGES
                             </Typography>
 
                             <TabList>
-                                {/* Tab 1 */}
-                                <Tab>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    position: "relative",
-                                                }}
-                                            >
-                                                <img
-                                                    src="/images/user1.png"
-                                                    alt="User"
-                                                    width="45px"
-                                                    height="45px"
-                                                    className="borRadius100"
-                                                />
-                                                <span className="active-status successBgColor"></span>
-                                            </Box>
-
-                                            <Box className="ml-1">
-                                                <Typography
-                                                    as="h4"
-                                                    fontSize="13px"
-                                                    fontWeight="500"
-                                                    mb="5px"
-                                                >
-                                                    Laurent Perrier
-                                                </Typography>
-                                                <Typography fontSize="12px">
-                                                    Typing...
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-
-                                        <Box textAlign="right">
-                                            <Typography
-                                                sx={{
-                                                    color: "#A9A9C8",
-                                                    fontSize: "11px",
-                                                }}
-                                            >
-                                                4:30 PM
-                                            </Typography>
-
-                                            <Box className="mr-10px">
-                                                <Badge
-                                                    badgeContent={2}
-                                                    color="primary"
-                                                    className="for-dark-text-white"
-                                                ></Badge>
-                                            </Box>
-                                        </Box>
-                                    </Box>
-                                </Tab>
-
-                                {/* Tab 2 */}
-                                <Tab>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    position: "relative",
-                                                }}
-                                            >
-                                                <img
-                                                    src="/images/user2.png"
-                                                    alt="User"
-                                                    width="45px"
-                                                    height="45px"
-                                                    className="borRadius100"
-                                                />
-                                                <span className="active-status successBgColor"></span>
-                                            </Box>
-
-                                            <Box className="ml-1">
-                                                <Typography
-                                                    as="h4"
-                                                    fontSize="13px"
-                                                    fontWeight="500"
-                                                    mb="5px"
-                                                >
-                                                    Nunez Faulkner
-                                                </Typography>
-                                                <Typography fontSize="12px">
-                                                    Hello everyone ...
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-
-                                        <Box textAlign="right">
-                                            <Typography
-                                                sx={{
-                                                    color: "#A9A9C8",
-                                                    fontSize: "11px",
-                                                }}
-                                            >
-                                                9.36 AM
-                                            </Typography>
-
-                                            <Box className="mr-10px">
-                                                <Badge
-                                                    badgeContent={1}
-                                                    color="primary"
-                                                    className="for-dark-text-white"
-                                                ></Badge>
-                                            </Box>
-                                        </Box>
-                                    </Box>
-                                </Tab>
-
-                                {/* Tab 3 */}
-                                <Tab>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    position: "relative",
-                                                }}
-                                            >
-                                                <img
-                                                    src="/images/user3.png"
-                                                    alt="User"
-                                                    width="45px"
-                                                    height="45px"
-                                                    className="borRadius100"
-                                                />
-                                                <span className="active-status successBgColor"></span>
-                                            </Box>
-
-                                            <Box className="ml-1">
-                                                <Typography
-                                                    as="h4"
-                                                    fontSize="13px"
-                                                    fontWeight="500"
-                                                    mb="5px"
-                                                >
-                                                    Bernard Langley
-                                                </Typography>
-                                                <Typography fontSize="12px">
-                                                    That cool, go for it...
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-
-                                        <Box textAlign="right">
-                                            <Typography
-                                                sx={{
-                                                    color: "#A9A9C8",
-                                                    fontSize: "11px",
-                                                }}
-                                            >
-                                                7.18 PM
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </Tab>
-
-                                {/* Tab 4 */}
-                                <Tab>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    position: "relative",
-                                                }}
-                                            >
-                                                <img
-                                                    src="/images/user4.png"
-                                                    alt="User"
-                                                    width="45px"
-                                                    height="45px"
-                                                    className="borRadius100"
-                                                />
-                                                <span className="active-status successBgColor"></span>
-                                            </Box>
-
-                                            <Box className="ml-1">
-                                                <Typography
-                                                    as="h4"
-                                                    fontSize="13px"
-                                                    fontWeight="500"
-                                                    mb="5px"
-                                                >
-                                                    Edwards Mckenz
-                                                </Typography>
-                                                <Typography fontSize="12px">
-                                                    Great ! 🔥
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-
-                                        <Box textAlign="right">
-                                            <Typography
-                                                sx={{
-                                                    color: "#A9A9C8",
-                                                    fontSize: "11px",
-                                                }}
-                                            >
-                                                08:30 PM
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </Tab>
-
-                                {/* Tab 5 */}
-                                <Tab>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    position: "relative",
-                                                }}
-                                            >
-                                                <img
-                                                    src="/images/user5.png"
-                                                    alt="User"
-                                                    width="45px"
-                                                    height="45px"
-                                                    className="borRadius100"
-                                                />
-                                                <span className="active-status successBgColor"></span>
-                                            </Box>
-
-                                            <Box className="ml-1">
-                                                <Typography
-                                                    as="h4"
-                                                    fontSize="13px"
-                                                    fontWeight="500"
-                                                    mb="5px"
-                                                >
-                                                    Elsie Melendez
-                                                </Typography>
-                                                <Typography fontSize="12px">
-                                                    Typing...
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-
-                                        <Box textAlign="right">
-                                            <Typography
-                                                sx={{
-                                                    color: "#A9A9C8",
-                                                    fontSize: "11px",
-                                                }}
-                                            >
-                                                2:30 PM
-                                            </Typography>
-
-                                            <Box className="mr-10px">
-                                                <Badge
-                                                    badgeContent={5}
-                                                    color="primary"
-                                                    className="for-dark-text-white"
-                                                ></Badge>
-                                            </Box>
-                                        </Box>
-                                    </Box>
-                                </Tab>
-
-                                {/* Tab 6 */}
-                                <Tab>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    position: "relative",
-                                                }}
-                                            >
-                                                <img
-                                                    src="/images/user6.png"
-                                                    alt="User"
-                                                    width="45px"
-                                                    height="45px"
-                                                    className="borRadius100"
-                                                />
-                                                <span className="active-status secondaryBgColor"></span>
-                                            </Box>
-
-                                            <Box className="ml-1">
-                                                <Typography
-                                                    as="h4"
-                                                    fontSize="13px"
-                                                    fontWeight="500"
-                                                    mb="5px"
-                                                >
-                                                    Mcleod Wagner
-                                                </Typography>
-                                                <Typography fontSize="12px">
-                                                    What are you...
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-
-                                        <Box textAlign="right">
-                                            <Typography
-                                                sx={{
-                                                    color: "#A9A9C8",
-                                                    fontSize: "11px",
-                                                }}
-                                            >
-                                                1:30 PM
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </Tab>
-
-                                {/* Tab 7 */}
-                                <Tab>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    position: "relative",
-                                                }}
-                                            >
-                                                <img
-                                                    src="/images/user7.png"
-                                                    alt="User"
-                                                    width="45px"
-                                                    height="45px"
-                                                    className="borRadius100"
-                                                />
-                                            </Box>
-
-                                            <Box className="ml-1">
-                                                <Typography
-                                                    as="h4"
-                                                    fontSize="13px"
-                                                    fontWeight="500"
-                                                    mb="5px"
-                                                >
-                                                    Joseph Strickland
-                                                </Typography>
-                                                <Typography fontSize="12px">
-                                                    Hello Joseph!!
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-
-                                        <Box textAlign="right">
-                                            <Typography
-                                                sx={{
-                                                    color: "#A9A9C8",
-                                                    fontSize: "11px",
-                                                }}
-                                            >
-                                                7:30 PM
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </Tab>
-
-                                {/* Tab 8 */}
-                                <Tab>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    position: "relative",
-                                                }}
-                                            >
-                                                <img
-                                                    src="/images/user8.png"
-                                                    alt="User"
-                                                    width="45px"
-                                                    height="45px"
-                                                    className="borRadius100"
-                                                />
-                                            </Box>
-
-                                            <Box className="ml-1">
-                                                <Typography
-                                                    as="h4"
-                                                    fontSize="13px"
-                                                    fontWeight="500"
-                                                    mb="5px"
-                                                >
-                                                    Joseph Strickland
-                                                </Typography>
-                                                <Typography fontSize="12px">
-                                                    How are you?
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-
-                                        <Box textAlign="right">
-                                            <Typography
-                                                sx={{
-                                                    color: "#A9A9C8",
-                                                    fontSize: "11px",
-                                                }}
-                                            >
-                                                5:30 PM
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </Tab>
-
-                                {/* Tab 9 */}
-                                <Tab>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    position: "relative",
-                                                }}
-                                            >
-                                                <img
-                                                    src="/images/user9.png"
-                                                    alt="User"
-                                                    width="45px"
-                                                    height="45px"
-                                                    className="borRadius100"
-                                                />
-                                            </Box>
-
-                                            <Box className="ml-1">
-                                                <Typography
-                                                    as="h4"
-                                                    fontSize="13px"
-                                                    fontWeight="500"
-                                                    mb="5px"
-                                                >
-                                                    Silva Foster
-                                                </Typography>
-                                                <Typography fontSize="12px">
-                                                    Cool! 🔥
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-
-                                        <Box textAlign="right">
-                                            <Typography
-                                                sx={{
-                                                    color: "#A9A9C8",
-                                                    fontSize: "11px",
-                                                }}
-                                            >
-                                                8:30 PM
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </Tab>
+                                {Object.entries(messages).map(
+                                    ([patientNumber, chats], idx) => (
+                                        <Tab key={idx}>
+                                            <ChatTab
+                                                patientNumber={patientNumber}
+                                                topMessage={
+                                                    chats[chats.length - 1]
+                                                }
+                                            />
+                                        </Tab>
+                                    )
+                                )}
                             </TabList>
                         </Card>
                     </Grid>
@@ -701,50 +223,17 @@ export default function Chat() {
                                 borderRadius: "10px",
                             }}
                         >
-                            <TabPanel>
-                                {/* ChatBox */}
-                                <ChatBox />
-                            </TabPanel>
-
-                            <TabPanel>
-                                {/* ChatBox */}
-                                <ChatBoxTwo />
-                            </TabPanel>
-
-                            <TabPanel>
-                                {/* ChatBox */}
-                                <ChatBoxThree />
-                            </TabPanel>
-
-                            <TabPanel>
-                                {/* ChatBox */}
-                                <ChatBox />
-                            </TabPanel>
-
-                            <TabPanel>
-                                {/* ChatBox */}
-                                <ChatBoxTwo />
-                            </TabPanel>
-
-                            <TabPanel>
-                                {/* ChatBox */}
-                                <ChatBoxThree />
-                            </TabPanel>
-
-                            <TabPanel>
-                                {/* ChatBox */}
-                                <ChatBox />
-                            </TabPanel>
-
-                            <TabPanel>
-                                {/* ChatBox */}
-                                <ChatBoxTwo />
-                            </TabPanel>
-
-                            <TabPanel>
-                                {/* ChatBox */}
-                                <ChatBoxThree />
-                            </TabPanel>
+                            {Object.entries(messages).map(
+                                ([patientNumber, messages], idx) => (
+                                    <TabPanel key={idx}>
+                                        {/* ChatBox */}
+                                        <ChatBox
+                                            patientNumber={patientNumber}
+                                            messages={messages}
+                                        />
+                                    </TabPanel>
+                                )
+                            )}
                         </Card>
                     </Grid>
                 </Grid>
