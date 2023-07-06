@@ -78,6 +78,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Chat() {
+    const [tabIndex, setTabIndex] = React.useState(0);
+
+    const autoFocusRef = React.useRef(null);
+
+    // scroll to bottom after ever sent message
+    const scrollToBottom = () => {
+        autoFocusRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    };
+
     const [messages, setMessages] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
@@ -148,7 +160,14 @@ export default function Chat() {
                 </ul>
             </div>
 
-            <Tabs className="chat-tabs">
+            <Tabs
+                className="chat-tabs"
+                selectedIndex={tabIndex}
+                onSelect={(index) => {
+                    scrollToBottom();
+                    setTabIndex(index);
+                }}
+            >
                 <Grid
                     container
                     rowSpacing={1}
@@ -223,6 +242,7 @@ export default function Chat() {
                                         <ChatBox
                                             patientNumber={patientNumber}
                                             messages={messages}
+                                            autoFocusRef={autoFocusRef}
                                         />
                                     </TabPanel>
                                 )
@@ -230,6 +250,7 @@ export default function Chat() {
                         </Card>
                     </Grid>
                 </Grid>
+                {/* <div ref={autoFocusRef}></div> */}
             </Tabs>
         </>
     );

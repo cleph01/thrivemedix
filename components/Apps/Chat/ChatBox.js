@@ -19,7 +19,7 @@ import SendIcon from "@mui/icons-material/Send";
 import useGetDocumentWhere from "../../../firebase/useGetDocumentWhere";
 import sendSMS from "../../../firebase/sendSMS";
 
-const ChatBox = ({ patientNumber, messages, idx }) => {
+const ChatBox = ({ patientNumber, messages, autoFocusRef }) => {
     const endOfMessagesRef = React.useRef();
 
     // scroll to bottom after ever sent message
@@ -329,6 +329,7 @@ const ChatBox = ({ patientNumber, messages, idx }) => {
                                     background: "#fff",
                                 },
                             }}
+                            inputRef={autoFocusRef}
                         />
 
                         <Button
