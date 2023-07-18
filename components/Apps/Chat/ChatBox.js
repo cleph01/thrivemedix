@@ -20,8 +20,6 @@ import useGetDocumentWhere from "../../../firebase/useGetDocumentWhere";
 import sendSMS from "../../../firebase/sendSMS";
 
 const ChatBox = ({ patientNumber, messages, endOfMessagesRef }) => {
-    // const endOfMessagesRef = React.useRef();
-
     // scroll to bottom after ever sent message
     const scrollToBottom = () => {
         endOfMessagesRef.current.scrollIntoView({
@@ -61,10 +59,57 @@ const ChatBox = ({ patientNumber, messages, endOfMessagesRef }) => {
         chatInput.value = "";
 
         // scroll to bottom after ever sent message
-        scrollToBottom();
+        // scrollToBottom();
 
         console.log("result of sending SMS: ", result);
     };
+
+    // Real Scroll Starts
+
+    const outerDiv = React.useRef(null);
+    const innerDiv = React.useRef(null);
+
+    const prevInnerDivHeight = React.useRef(null);
+
+    const [showMessages, setShowMessages] = React.useState(false);
+    const [showScrollButton, setShowScrollButton] = React.useState(false);
+
+    React.useEffect(() => {
+        const outerDivHeight = outerDiv.current?.clientHeight;
+        const innerDivHeight = innerDiv.current?.clientHeight;
+        const outerDivScrollTop = outerDiv.current?.scrollTop;
+
+        if (
+            !prevInnerDivHeight.current ||
+            outerDivScrollTop === prevInnerDivHeight.current - outerDivHeight
+        ) {
+            outerDiv.current?.scrollTo({
+                top: innerDivHeight - outerDivHeight,
+                left: 0,
+                behavior: prevInnerDivHeight.current ? "smooth" : "auto",
+            });
+            setShowMessages(true);
+        } else {
+            setShowScrollButton(true);
+        }
+
+        prevInnerDivHeight.current = innerDivHeight;
+    }, [messages]);
+
+    const handleScrollButtonClick = React.useCallback(() => {
+        const outerDivHeight = outerDiv.current.clientHeight;
+        const innerDivHeight = innerDiv.current.clientHeight;
+
+        outerDiv.current.scrollTo({
+            top: innerDivHeight - outerDivHeight,
+            left: 0,
+            behavior: "smooth",
+        });
+
+        setShowScrollButton(false);
+    }, []);
+
+    // Real Scroll Ends
 
     const {
         doc = patient,
@@ -184,118 +229,131 @@ const ChatBox = ({ patientNumber, messages, endOfMessagesRef }) => {
                 </Box>
 
                 {/* Chat List */}
-                <div className="chat-list-box">
-                    {messages.map((message, idx) =>
-                        message.direction === "in" ? (
-                            <Box
-                                key={message.id}
-                                sx={{
-                                    display: "flex",
-                                    maxWidth: "730px",
-                                    mb: "20px",
-                                }}
-                            >
-                                {/* Left Chat */}
-                                <img
-                                    src="/images/user1.png"
-                                    alt="user"
-                                    width="35px"
-                                    height="35px"
-                                    className="borRadius100"
-                                />
+                <div className="chat-list-box" ref={outerDiv}>
+                    <div ref={innerDiv}>
+                        {messages.map((message, idx) =>
+                            message.direction === "in" ? (
                                 <Box
+                                    key={message.id}
                                     sx={{
                                         display: "flex",
+                                        maxWidth: "730px",
+                                        mb: "20px",
                                     }}
-                                    className="ml-1"
                                 >
-                                    <Box>
-                                        <Typography
-                                            sx={{
-                                                background: "#F5F6FA",
-                                                borderRadius:
-                                                    "0px 15px 15px 15px",
-                                                p: "14px 20px",
-                                                mb: "10px",
-                                            }}
-                                            className="dark-BG-101010"
-                                        >
-                                            {message.message}
-                                        </Typography>
+                                    {/* Left Chat */}
+                                    <img
+                                        src="/images/user1.png"
+                                        alt="user"
+                                        width="35px"
+                                        height="35px"
+                                        className="borRadius100"
+                                    />
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                        }}
+                                        className="ml-1"
+                                    >
+                                        <Box>
+                                            <Typography
+                                                sx={{
+                                                    background: "#F5F6FA",
+                                                    borderRadius:
+                                                        "0px 15px 15px 15px",
+                                                    p: "14px 20px",
+                                                    mb: "10px",
+                                                }}
+                                                className="dark-BG-101010"
+                                            >
+                                                {message.message}
+                                            </Typography>
 
-                                        <Typography fontSize="12px">
-                                            {message.timestamp
-                                                ?.toDate()
-                                                .toLocaleTimeString([], {
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                })}
-                                        </Typography>
+                                            <Typography fontSize="12px">
+                                                {message.timestamp
+                                                    ?.toDate()
+                                                    .toLocaleTimeString([], {
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                    })}
+                                            </Typography>
+                                        </Box>
                                     </Box>
                                 </Box>
-                            </Box>
-                        ) : (
-                            <Box
-                                key={message.id}
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "end",
-                                    maxWidth: "730px",
-                                    mb: "20px",
-                                }}
-                                className="ml-auto"
-                            >
-                                {/* Right Chat */}
+                            ) : (
                                 <Box
+                                    key={message.id}
                                     sx={{
                                         display: "flex",
+                                        justifyContent: "end",
+                                        maxWidth: "730px",
+                                        mb: "20px",
                                     }}
-                                    className="ml-1"
+                                    className="ml-auto"
                                 >
-                                    <Box className="mr-1">
-                                        <Typography
-                                            sx={{
-                                                background: "#757FEF",
-                                                color: "#fff !important",
-                                                borderRadius:
-                                                    "15px 0 15px 15px",
-                                                p: "14px 20px",
-                                                mb: "10px",
-                                            }}
-                                        >
-                                            {message.message}
-                                        </Typography>
+                                    {/* Right Chat */}
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                        }}
+                                        className="ml-1"
+                                    >
+                                        <Box className="mr-1">
+                                            <Typography
+                                                sx={{
+                                                    background: "#757FEF",
+                                                    color: "#fff !important",
+                                                    borderRadius:
+                                                        "15px 0 15px 15px",
+                                                    p: "14px 20px",
+                                                    mb: "10px",
+                                                }}
+                                            >
+                                                {message.message}
+                                            </Typography>
 
-                                        <Typography
-                                            fontSize="12px"
-                                            textAlign="end"
-                                        >
-                                            {message.timestamp
-                                                ?.toDate()
-                                                .toLocaleTimeString([], {
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                })}
-                                        </Typography>
+                                            <Typography
+                                                fontSize="12px"
+                                                textAlign="end"
+                                            >
+                                                {message.timestamp
+                                                    ?.toDate()
+                                                    .toLocaleTimeString([], {
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                    })}
+                                            </Typography>
+                                        </Box>
                                     </Box>
-                                </Box>
 
-                                <img
-                                    src="/images/user2.png"
-                                    alt="user"
-                                    width="35px"
-                                    height="35px"
-                                    className="borRadius100"
-                                />
-                            </Box>
-                        )
-                    )}
-                    <div
-                        style={{ marginBottom: "5rem" }}
-                        ref={endOfMessagesRef}
-                    ></div>
+                                    <img
+                                        src="/images/user2.png"
+                                        alt="user"
+                                        width="35px"
+                                        height="35px"
+                                        className="borRadius100"
+                                    />
+                                </Box>
+                            )
+                        )}
+                        {/* <div
+                            style={{ marginBottom: "5rem" }}
+                            ref={endOfMessagesRef}
+                        ></div> */}
+                    </div>
                 </div>
-
+                {/* New Message Scroll Button */}
+                <button
+                    style={{
+                        transform: "translateX(-50%)",
+                        opacity: showScrollButton ? 1 : 0,
+                        pointerEvents: showScrollButton ? "auto" : "none",
+                    }}
+                    className="absolute bg-red-500 text-white bottom-1 left-1/2 w-28 rounded-lg text-sm transition-all duration-300"
+                    onClick={handleScrollButtonClick}
+                >
+                    New Message!
+                </button>
                 {/* Footer */}
                 <Box
                     sx={{

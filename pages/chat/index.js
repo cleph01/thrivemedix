@@ -164,7 +164,7 @@ export default function Chat() {
                 className="chat-tabs"
                 selectedIndex={tabIndex}
                 onSelect={(index) => {
-                    scrollToBottom();
+                    // scrollToBottom();
                     setTabIndex(index);
                 }}
             >

@@ -4,7 +4,7 @@ import styles from "@/styles/PageTitle.module.css";
 import Features from "@/components/Dashboard/Analytics/Features";
 import Profile from "@/components/Dashboard/Analytics/Profile";
 import AudienceOverview from "@/components/Dashboard/Analytics/AudienceOverview";
-import VisitsByDayAndNetIncome from "@/components/Dashboard/Analytics/VisitsByDayAndNetIncome";
+import VisitsByDayAndNetIncome from "@/components/Dashboard/Analytics/VisitsByDayAndNetIncome/index";
 import SalesAnalytics from "@/components/Dashboard/Analytics/SalesAnalytics";
 import TotalRevenue from "@/components/Dashboard/Analytics/TotalRevenue";
 import ActivityTimeline from "@/components/Dashboard/Analytics/ActivityTimeline";
@@ -26,7 +26,7 @@ export default function Analytics() {
                 <h1>Analytics</h1>
                 <ul>
                     <li>
-                        <Link href="/analytics/">Dashboard</Link>
+                        <Link href="/">Dashboard</Link>
                     </li>
                     <li>Analytics</li>
                 </ul>

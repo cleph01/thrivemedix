@@ -19,6 +19,7 @@ import InsightsIcon from "@mui/icons-material/Insights";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 
 export const SidebarData = [
     {
@@ -40,6 +41,11 @@ export const SidebarData = [
         title: "SMS Chat",
         path: "/chat/",
         icon: <TextsmsIcon />,
+    },
+    {
+        title: "User Management",
+        path: "/user-management/",
+        icon: <SupervisorAccountIcon />,
     },
     {
         title: "Contact List",

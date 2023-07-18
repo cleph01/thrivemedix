@@ -11,31 +11,48 @@ class NewReturning extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            series: [60],
+            series: [5992, 2813, 1162, 136],
             options: {
-                plotOptions: {
-                    radialBar: {
-                        hollow: {
-                            size: "50%",
-                        },
-                        track: {
-                            background: "rgba(117, 127, 239, 0.5)",
-                        },
-                        dataLabels: {
-                            name: {
+                labels: [
+                    "Search-mobile",
+                    "Search-desktop",
+                    "Maps-mobile",
+                    "Maps-desktop",
+                ],
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return Math.trunc(val) + "%";
+                    },
+                    dropShadow: {
+                        enabled: false,
+                        top: 1,
+                        left: 1,
+                        blur: 1,
+                        color: "#000",
+                        opacity: 0.45,
+                    },
+                    donut: {
+                        labels: {
+                            total: {
                                 show: false,
-                            },
-                            value: {
-                                offsetY: 4,
-                                color: "#757FEF",
-                                fontSize: "16px",
-                                fontWeight: "500",
+                                showAlways: false,
+                                label: "Total",
+                                fontSize: "22px",
+                                fontFamily: "Helvetica, Arial, sans-serif",
+                                fontWeight: 600,
+                                color: "#373d3f",
+                                formatter: function (w) {
+                                    return w.globals.seriesTotals.reduce(
+                                        (a, b) => {
+                                            return a + b;
+                                        },
+                                        0
+                                    );
+                                },
                             },
                         },
                     },
-                },
-                fill: {
-                    colors: ["#757FEF"],
                 },
             },
         };
@@ -72,7 +89,7 @@ class NewReturning extends Component {
                     <Chart
                         options={this.state.options}
                         series={this.state.series}
-                        type="radialBar"
+                        type="donut"
                     />
 
                     <>
