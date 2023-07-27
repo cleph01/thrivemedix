@@ -4,7 +4,7 @@ import styles from "@/styles/PageTitle.module.css";
 import Features from "@/components/Dashboard/Analytics/Features";
 import Profile from "@/components/Dashboard/Analytics/Profile";
 import AudienceOverview from "@/components/Dashboard/Analytics/AudienceOverview";
-import VisitsByDayAndNetIncome from "@/components/Dashboard/Analytics/VisitsByDayAndNetIncome/old_index";
+import VisitsByDayAndNetIncome from "@/components/Dashboard/Analytics/VisitsByDayAndNetIncome/index";
 import SalesAnalytics from "@/components/Dashboard/Analytics/SalesAnalytics";
 import TotalRevenue from "@/components/Dashboard/Analytics/TotalRevenue";
 import ActivityTimeline from "@/components/Dashboard/Analytics/ActivityTimeline";
