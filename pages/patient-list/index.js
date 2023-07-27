@@ -1,16 +1,5 @@
-"use client";
-// pocowwqxpyflscyw
-
 import * as React from "react";
-
-import {
-    Box,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
-    Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
@@ -46,16 +35,6 @@ import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
-import { PermScanWifi } from "@mui/icons-material";
-
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-import sendEmail from "../../firebase/sendEmail";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -176,201 +155,165 @@ MembersLists.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(id, name, image, userName, email, tags, permission) {
+function createData(name, image, userName, email, tags, projects) {
     return {
-        id,
         name,
         image,
         userName,
         email,
         tags,
-        permission,
+        projects,
     };
 }
 
 const rows = [
     createData(
-        "001",
         "Evangelina Mcclain",
         "/images/user1.png",
         "@jstevenson5c",
         "jordansteve@gmail.com",
         "HTML, CSS & JS",
-        "editor"
+        "165"
     ),
     createData(
-        "002",
         "Candice Munoz",
         "/images/user2.png",
         "@candice3unoz",
         "candicemunoz@gmail.com",
         "React, Next.js",
-        "editor"
+        "120"
     ),
     createData(
-        "003",
         "Mike Mcclain",
         "/images/user3.png",
         "@mike4mcclain",
         "mikemcclain@gmail.com",
         "Angular, Gatsby",
-        "editor"
+        "220"
     ),
     createData(
-        "004",
         "Bernard Langley",
         "/images/user4.png",
         "@bernardlangley",
         "bernardlangley@gmail.com",
         "HTML, React & Sass",
-        "editor"
+        "122"
     ),
     createData(
-        "005",
         "Kristie Hall",
         "/images/user5.png",
         "@kristie7hall",
         "kristiehall@gmail.com",
         "React, Next.js & Sass",
-        "editor"
+        "360"
     ),
     createData(
-        "006",
         "Bolton Obrien",
         "/images/user6.png",
         "@bolton4obrien",
         "boltonobrien@gmail.com",
         "Angular, HTML & Sass",
-        "editor"
+        "250"
     ),
     createData(
-        "007",
         "Dee Alvarado",
         "/images/user7.png",
         "@dee3alvarado",
         "deealvarado@gmail.com",
         "React, Next.js & Sass",
-        "editor"
+        "140"
     ),
     createData(
-        "008",
         "Cervantes Kramer",
         "/images/user8.png",
         "@cervantes4kramer",
         "cervantes4kramer@gmail.com",
         "Gatsby, React & Sass",
-        "editor"
+        "345"
     ),
     createData(
-        "009",
         "Dejesus Michael",
         "/images/user9.png",
         "@dejesus1michael",
         "dejesusmichael@gmail.com",
         "React, Gatsby & Sass",
-        "editor"
+        "323"
     ),
     createData(
-        "010",
         "Alissa Nelson",
         "/images/user10.png",
         "@alissa1nelson",
         "alissa1nelson@gmail.com",
         "React, Gatsby & Sass",
-        "owner"
+        "451"
     ),
     createData(
-        "012",
         "Milton",
         "/images/user11.png",
         "@milton",
         "milton@gmail.com",
         "React, HTML & Sass",
-        "editor"
+        "432"
     ),
     createData(
-        "013",
         "Claude",
         "/images/user12.png",
         "@claude",
         "claude@gmail.com",
         "React, Gatsby & Sass",
-        "editor"
+        "543"
     ),
     createData(
-        "014",
         "Joshua",
         "/images/user13.png",
         "@joshua",
         "joshua@gmail.com",
         "React, Gatsby & Sass",
-        "editor"
+        "543"
     ),
     createData(
-        "015",
         "Harvey",
         "/images/user14.png",
         "@harvey",
         "harvey@gmail.com",
         "React, Gatsby & Sass",
-        "editor"
+        "432"
     ),
     createData(
-        "016",
         "Antonio",
         "/images/user15.png",
         "@antonio",
         "antonio@gmail.com",
         "React, Gatsby & Sass",
-        "admin"
+        "765"
     ),
     createData(
-        "017",
         "Julian",
         "/images/user16.png",
         "@julian",
         "julian@gmail.com",
         "React, Gatsby & Sass",
-        "editor"
+        "678"
     ),
     createData(
-        "018",
         "Harold",
         "/images/user17.png",
         "@harold",
         "harold@gmail.com",
         "React, Gatsby & Sass",
-        "editor"
+        "165"
     ),
     createData(
-        "019",
         "Kingston",
         "/images/user18.png",
         "@kingston",
         "kingston@info.com",
         "React, Gatsby & Sass",
-        "editor"
+        "165"
     ),
 ].sort((a, b) => (a.name < b.name ? -1 : 1));
 
 export default function MembersList() {
-    // Save User Permission from Create New User Select Input form
-    const [permission, setPermission] = React.useState("");
-
-    const handlePermissionChange = (event) => {
-        setPermission(event.target.value);
-    };
-
-    const [openSnackBar, setOpenSnackBar] = React.useState(false);
-
-    const handleCloseSnackBar = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-
-        setOpenSnackBar(false);
-    };
-
     // Table
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -400,38 +343,11 @@ export default function MembersList() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
-        setOpenSnackBar(true);
-
         const data = new FormData(event.currentTarget);
-
-        const firstName = data.get("firstName");
-        const lastName = data.get("lastName");
-        const email = data.get("email");
-
-        const payload = {
-            businessId: "X5xnQE4nqjRTmQDQzc3H",
-            senderId: "3WNdxv3reGWEkw3To6fofqYRYio1",
-            to: email,
-            firstName: firstName,
-            lastName: lastName,
-            subject: "Register to TextMedix",
-            html: "<h2>You're Invited</h2><span> Testing HTML</span><div><p><strong>Booya!</strong></p><a href='www.google.com' target='_blank' style='text-docration: none; color: red'>Click this link</div>",
-            text: "This is the plaing text look",
-            permission: permission,
-            firstName: firstName,
-            lastName: lastName,
-        };
-
-        console.log("invite payload: ", payload);
-
-        const { result, error } = sendEmail(payload);
-
-        if (error) {
-            console.log("error: ", error);
-        } else {
-            console.log("result: ", result);
-        }
+        console.log({
+            email: data.get("email"),
+            password: data.get("password"),
+        });
     };
     // End Add Task Modal
 
@@ -439,12 +355,12 @@ export default function MembersList() {
         <>
             {/* Page title */}
             <div className={styles.pageTitle}>
-                <h1>User Management</h1>
+                <h1>Contacts</h1>
                 <ul>
                     <li>
                         <Link href="/">Dashboard</Link>
                     </li>
-                    <li>User Management</li>
+                    <li>Patient List</li>
                 </ul>
             </div>
 
@@ -474,51 +390,7 @@ export default function MembersList() {
                             fontWeight: 500,
                         }}
                     >
-                        Users List
-                        <Typography
-                            as="span"
-                            sx={{
-                                fontSize: 12,
-                                fontWeight: 500,
-                                marginLeft: 4,
-                                borderBottom: "3px solid #757fef",
-                                padding: "0px 5px 5px",
-                            }}
-                        >
-                            Active (15)
-                        </Typography>
-                        <Link
-                            href="/user-management/pending"
-                            style={{ textDecoration: "none", color: "#260944" }}
-                        >
-                            <Typography
-                                as="span"
-                                sx={{
-                                    fontSize: 12,
-                                    fontWeight: 500,
-                                    marginLeft: 4,
-                                    cursor: "pointer",
-                                }}
-                            >
-                                Pending (2)
-                            </Typography>
-                        </Link>
-                        <Link
-                            href="/user-management/invited"
-                            style={{ textDecoration: "none", color: "#260944" }}
-                        >
-                            <Typography
-                                as="span"
-                                sx={{
-                                    fontSize: 12,
-                                    fontWeight: 500,
-                                    marginLeft: 4,
-                                    cursor: "pointer",
-                                }}
-                            >
-                                Invited (2)
-                            </Typography>
-                        </Link>
+                        Patient List
                     </Typography>
 
                     <Button
@@ -590,7 +462,7 @@ export default function MembersList() {
                                         fontSize: "13.5px",
                                     }}
                                 >
-                                    Permission
+                                    Projects
                                 </TableCell>
 
                                 <TableCell
@@ -696,7 +568,7 @@ export default function MembersList() {
                                             paddingBottom: "13px",
                                         }}
                                     >
-                                        {row.permission ? row.permission : "-"}
+                                        {row.projects}
                                     </TableCell>
 
                                     <TableCell
@@ -725,11 +597,11 @@ export default function MembersList() {
                                             </Tooltip>
 
                                             <Tooltip
-                                                title="Edit"
+                                                title="Rename"
                                                 placement="top"
                                             >
                                                 <IconButton
-                                                    aria-label="edit"
+                                                    aria-label="rename"
                                                     size="small"
                                                     color="primary"
                                                     className="primary"
@@ -871,16 +743,16 @@ export default function MembersList() {
                                             mb: "12px",
                                         }}
                                     >
-                                        First Name
+                                        Name
                                     </Typography>
 
                                     <TextField
-                                        autoComplete="firstName"
-                                        name="firstName"
+                                        autoComplete="name"
+                                        name="name"
                                         required
                                         fullWidth
-                                        id="firstName"
-                                        label="First Name"
+                                        id="name"
+                                        label="Name"
                                         autoFocus
                                         InputProps={{
                                             style: { borderRadius: 8 },
@@ -897,16 +769,16 @@ export default function MembersList() {
                                             mb: "12px",
                                         }}
                                     >
-                                        Last Name
+                                        User Name
                                     </Typography>
 
                                     <TextField
-                                        autoComplete="lastName"
-                                        name="lastName"
+                                        autoComplete="user-name"
+                                        name="userName"
                                         required
                                         fullWidth
-                                        id="lastName"
-                                        label="Last Name"
+                                        id="userName"
+                                        label="User Name"
                                         autoFocus
                                         InputProps={{
                                             style: { borderRadius: 8 },
@@ -975,29 +847,21 @@ export default function MembersList() {
                                             mb: "12px",
                                         }}
                                     >
-                                        Permissions
+                                        Projects
                                     </Typography>
-                                    <FormControl fullWidth required>
-                                        <InputLabel id="demo-simple-select-label">
-                                            Permissions
-                                        </InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            required
-                                            value={permission}
-                                            label="Permissions"
-                                            onChange={handlePermissionChange}
-                                            style={{ borderRadius: 8 }}
-                                        >
-                                            <MenuItem value={"admin"}>
-                                                Admin
-                                            </MenuItem>
-                                            <MenuItem value={"editor"}>
-                                                Editor
-                                            </MenuItem>
-                                        </Select>
-                                    </FormControl>
+
+                                    <TextField
+                                        autoComplete="projects"
+                                        name="projects"
+                                        required
+                                        fullWidth
+                                        id="projects"
+                                        label="Example 5"
+                                        autoFocus
+                                        InputProps={{
+                                            style: { borderRadius: 8 },
+                                        }}
+                                    />
                                 </Grid>
 
                                 <Grid item xs={12} textAlign="end">
@@ -1046,7 +910,7 @@ export default function MembersList() {
                                             }}
                                             className="mr-3px"
                                         />{" "}
-                                        Create New User
+                                        Create New Patient
                                     </Button>
                                 </Grid>
                             </Grid>
@@ -1054,20 +918,6 @@ export default function MembersList() {
                     </Box>
                 </Box>
             </BootstrapDialog>
-
-            <Snackbar
-                open={openSnackBar}
-                autoHideDuration={5000}
-                onClose={handleCloseSnackBar}
-            >
-                <Alert
-                    onClose={handleCloseSnackBar}
-                    severity="success"
-                    sx={{ width: "100%" }}
-                >
-                    Email Invite Sent!
-                </Alert>
-            </Snackbar>
         </>
     );
 }

@@ -20,6 +20,9 @@ import StorefrontIcon from "@mui/icons-material/Storefront";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
+import ContactsIcon from "@mui/icons-material/Contacts";
+import CardMembershipIcon from "@mui/icons-material/CardMembership";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 export const SidebarData = [
     {
@@ -48,9 +51,19 @@ export const SidebarData = [
         icon: <SupervisorAccountIcon />,
     },
     {
-        title: "Contact List",
-        path: "/contact-list/",
-        icon: <ConnectWithoutContactIcon />,
+        title: "Patient List",
+        path: "/patient-list/",
+        icon: <ContactsIcon />,
+    },
+    {
+        title: "Billing",
+        path: "/billing/",
+        icon: <CardMembershipIcon />,
+    },
+    {
+        title: "Profile",
+        path: "/profile/",
+        icon: <AccountBoxIcon />,
     },
     {
         title: "Apps",
