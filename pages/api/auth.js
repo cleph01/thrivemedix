@@ -12,18 +12,12 @@ dotenv.config(); // Load environment variables from .env file
 // Access the environment variables
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, REDIRECT_URL } = process.env;
 
-// Google API Client
-// const oauth2Client = new OAuth2Client({
-//     client_id: process.env.GOOGLE_CLIENT_ID,
-//     client_secret: process.env.GOOGLE_CLIENT_SECRET,
-//     redirect_uri: process.env.REDIRECT_URL,
-// });
-
-const oauth2Client = new google.auth.OAuth2(
-    "1003712320461-rlt9cbndvmeeta700h2194s1s5p916d5.apps.googleusercontent.com",
-    "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",
-    "http://localhost:3000/api/auth"
-);
+//Google API Client
+const oauth2Client = new OAuth2Client({
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    redirect_uri: process.env.REDIRECT_URL,
+});
 
 // Function to securely store access tokens
 const storeTokens = (req, tokens) => {
