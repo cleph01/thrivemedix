@@ -16,6 +16,7 @@ import NewReturning from "@/components/Google/NewReturning";
 import Gender from "@/components/Google/Gender";
 import VisitorsAge from "@/components/Google/VisitorsAge";
 import SessionsDevice from "@/components/Google/SessionsDevice";
+import GoogleBusinessProfile from "./GoogleBusinessProfile";
 
 export default function Analytics() {
     return (
@@ -36,6 +37,11 @@ export default function Analytics() {
                 rowSpacing={1}
                 columnSpacing={{ xs: 1, sm: 2, md: 2 }}
             >
+                <Grid item xs={12} md={12} lg={12} xl={4}>
+                    {/* VisitsByDayAndNetIncome */}
+                    <GoogleBusinessProfile />
+                </Grid>
+
                 <Grid item xs={12} md={12} lg={12} xl={8}>
                     {/* Features */}
                     <Features />
