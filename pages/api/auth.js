@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { google } = require("googleapis");
-const { OAuth2Client } = require("google-auth-library");
+
 const axios = require("axios");
 // const session = require("express-session");
 // const { urlencoded } = require("body-parser");
@@ -12,18 +12,20 @@ dotenv.config(); // Load environment variables from .env file
 // Access the environment variables
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, REDIRECT_URL } = process.env;
 
-//Google API Client
-const oauth2Client = new OAuth2Client({
-    client_id: process.env.GOOGLE_CLIENT_ID,
-    client_secret: process.env.GOOGLE_CLIENT_SECRET,
-    redirect_uri: process.env.REDIRECT_URL,
-});
+console.log(
+    "env creds: ",
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
+    REDIRECT_URL
+);
 
-// Function to securely store access tokens
-const storeTokens = (req, tokens) => {
-    // Store the tokens in the session
-    req.session.tokens = tokens;
-};
+const oauth2Client = new google.auth.OAuth2(
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
+    REDIRECT_URL
+);
+
+
 
 // Function to get the stored tokens
 const getTokens = (req) => {
@@ -68,6 +70,42 @@ const getUserInfo = async (accessToken) => {
     }
 };
 
+// Function to get user-specific information from the Google Business Profile API
+const getLocationInfo = async (accessToken, accountId) => {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        };
+
+        // Got format for axios request from Google API page:
+        // https://developers.google.com/my-business/content/location-data#list_locations
+        // https://developers.google.com/my-business/reference/businessinformation/rest/v1/accounts.locations
+        const response = await axios.get(
+            `https://mybusinessbusinessinformation.googleapis.com/v1/accounts/${accountId.slice(
+                accountId.indexOf("/") + 1
+            )}/locations?readMask=name,title`,
+            config
+        );
+
+        console.log("location raw: ", response.data.locations);
+
+        const locations = response.data.locations.map((location) => ({
+            id: location.name,
+            name: location.title,
+        }));
+
+        return locations;
+    } catch (error) {
+        // Log the specific error details
+        console.error("getLocationInfo API error:", error);
+
+        // Rethrow the error to handle it in the calling function
+        throw error;
+    }
+};
+
 const router = Router();
 
 // POST route to initiate the authentication process
@@ -90,7 +128,8 @@ router.post("/api/auth", async (req, res) => {
 // GET route to handle the callback from Google API
 router.get("/api/auth", async (req, res) => {
     try {
-        console.log("req query: ", req.query);
+        // console.log("req query: ", req.query);
+
         const code = req.query.code;
         if (!code) {
             res.status(400).json({
@@ -104,21 +143,58 @@ router.get("/api/auth", async (req, res) => {
         try {
             const { tokens } = await oauth2Client.getToken(code);
             oauth2Client.setCredentials(tokens);
-            storeTokens(req, tokens);
+
+            // Store the tokens in session
+            req.session.tokens = tokens;
+
             const accounts = await getUserInfo(tokens.access_token);
             req.session.user = {
                 accounts,
             };
-            res.redirect("/google");
+
+            // For simplicity, assuming there's only one account for now
+            const accountId = accounts[0].id;
+
+            // Gets location info using the account ID and stores it in local storage
+            const locations = await getLocationInfo(
+                tokens.access_token,
+                accountId
+            );
+
+            // In this approach, the server-side code stores the locations data in a server-side
+            // session that will be accessed by a call to the "get-locations" endpoint
+            req.session.locations = locations;
+
+            // Redirect to the choose-location page
+            res.redirect("/google/choose-location");
         } catch (error) {
-            console.error("Token exchange error:", error);
+            console.error("Callback error:", error);
             res.status(500).json({
-                error: "Failed to retrieve access tokens",
+                error: "Callback Failed",
             });
         }
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "An error occurred" });
+    }
+});
+
+// Gets Location data saved in session from the Auth Callback (getLocations function above)
+router.get("/api/get-locations", (req, res) => {
+    try {
+        console.log("Session object: ", req.session);
+        // Check if the user has selected a location
+        if (!req.session || !req.session.locations) {
+            res.status(400).json({ error: "Locations not found" });
+            return;
+        }
+
+        const locations = req.session.locations;
+
+        res.status(200).json({ locations });
+    } catch (error) {
+        console.error("Error fetching locations:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 

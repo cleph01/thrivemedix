@@ -3,7 +3,7 @@ const next = require("next");
 const express = require("express");
 // require("express-async-errors");
 const { Router } = require("express");
-const { OAuth2Client } = require("google-auth-library");
+
 const axios = require("axios");
 const session = require("express-session");
 const { urlencoded } = require("body-parser");
@@ -30,7 +30,10 @@ app.prepare().then(() => {
             secret: "valentinamontoyazaviermontoya",
             resave: false,
             saveUninitialized: true,
-            cookie: { secure: true },
+            cookie: {
+                secure: true,
+                maxAge: 24 * 60 * 60 * 1000, // Set to 1 day in milliseconds
+            },
         })
     );
 
